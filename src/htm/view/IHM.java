@@ -69,6 +69,16 @@ public class IHM extends JFrame implements KeyListener, MouseInputListener
             tp.run(sp.getColumns());
             this.repaint();
         }
+        
+        if(e.getKeyCode() == KeyEvent.VK_A)
+        {
+            for(int i = 0; i < 10000; i++)
+            {
+                inputIndex++;
+                sp.process(inputs[inputIndex % maxInputs]);
+                this.repaint();
+            }
+        }
     }
     
     int h = 30;

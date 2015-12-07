@@ -1,6 +1,3 @@
-/*
- * Copyright Numenta. All Rights Reserved.
- */
 package htm.model.pooler;
 
 import java.util.ArrayList;

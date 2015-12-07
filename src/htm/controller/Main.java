@@ -1,11 +1,8 @@
 package htm.controller;
 
-import htm.model.model.Column;
 import htm.view.IHM;
 import java.io.IOException;
 import htm.model.pooler.SpatialPooler;
-import htm.model.pooler.TemporalPooler;
-import java.util.function.Function;
 
 public class Main
 {
