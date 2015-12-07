@@ -1,3 +1,6 @@
+/*
+ * Copyright Numenta. All Rights Reserved.
+ */
 package htm.model.pooler;
 
 import java.util.ArrayList;
@@ -118,7 +121,7 @@ public class SpatialPooler
         for (int x = 0; x < nbColumns; x++)
         {
             List<InputSynapse> synapses = new ArrayList<>(nbSynapses);
-            // System.out.println(nbSynapses);
+            
             for (int i = 0; i < nbSynapses; i++)
                 synapses.add(new InputSynapse(i, random.nextInt((int)(connectedPermanance * 10)) / 10.0));
             
@@ -126,7 +129,7 @@ public class SpatialPooler
         }
     }
     
-    private final Column[] columns;
+    private Column[] columns;
     
     private final int desiredLocalActivity;
     private final double connectedPermanance;
@@ -276,7 +279,7 @@ public class SpatialPooler
                 .filter(Column::isActive)
                 .map(Column::getSynapses)
                 .flatMap(Collection::stream)
-                .forEach(s -> s.setPermanance(s.getPermanance() + (s.getInputValue() == 1 ? permananceInc : -permananceDec)));
+                .forEach(s -> s.incPermanance(s.getInputValue() == 1 ? permananceInc : -permananceDec));
         
         Collection<Integer> radiuses = new LinkedList<>();
         
@@ -304,7 +307,7 @@ public class SpatialPooler
         
         this.inhibitionRadiusBefore = inhibitionRadius;
         this.inhibitionRadius = averageReceptiveFieldSize(radiuses);
-        //System.out.println(inhibitionRadius);
+        System.out.println(inhibitionRadius);
     }
     
     public double getInhibitionRadius()

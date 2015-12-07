@@ -23,8 +23,8 @@ public abstract class ISynapse
     {
         setPermanance(getPermanance() + value);
     }
-    public void setPermanance(double value)
+    public void setPermanance(double d)
     {
-        this.permanance = Math.min(Math.max(value, 0.0), 1.0);
+        this.permanance = Math.min(Math.max(d, 0.0), 1.0);
     }
 }

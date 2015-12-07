@@ -12,28 +12,41 @@ import javax.swing.event.MouseInputListener;
 import htm.model.model.Column;
 import htm.model.model.InputSynapse;
 import htm.model.pooler.SpatialPooler;
+import htm.model.pooler.TemporalPooler;
 
 public class IHM extends JFrame implements KeyListener, MouseInputListener
 {
-    public IHM(SpatialPooler sp)
+    public IHM(SpatialPooler sp, int nbInputs)
     {
         this.sp = sp;
+        this.tp = new TemporalPooler(sp);
         
         this.addKeyListener(this);
         this.addMouseListener(this);
         
         this.setSize(1000, 600);
+        
+        maxInputs = Math.min(inputs.length, nbInputs);
+        
+        for(int i = 0; i < 1000; i++)
+        {
+            inputIndex++;
+            sp.process(inputs[inputIndex % maxInputs]);
+        }
     }
     
-    private SpatialPooler sp;
+    private final SpatialPooler sp;
+    private TemporalPooler tp;
     
     private int[][] inputs = new int[][]
     {
         { 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 },
+        { 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0 },
         { 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1 },
-        { 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0 },
         { 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0 }
     };
+    private final int maxInputs;
+    
     int[] outputSimu = { 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 };
     int[] inputSimu = { 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 };
     private int inputIndex = 0;
@@ -52,7 +65,8 @@ public class IHM extends JFrame implements KeyListener, MouseInputListener
         if(e.getKeyCode() == KeyEvent.VK_SPACE)
         {
             inputIndex++;
-            sp.process(inputs[inputIndex % inputs.length]);
+            sp.process(inputs[inputIndex % maxInputs]);
+            tp.run(sp.getColumns());
             this.repaint();
         }
     }
@@ -114,11 +128,17 @@ public class IHM extends JFrame implements KeyListener, MouseInputListener
                     }
                 }
             }
+            
+            if(tp != null && tp.isPreditive(c))
+            {
+                g.setColor(Color.CYAN);
+                g.fillOval(cooX + 5, cooY + 5, w - 5 * 2, h - 5 * 2);
+            }
         }
         
         g.setColor(Color.black);
         
-        int[] input = inputs[inputIndex % inputs.length];
+        int[] input = inputs[inputIndex % maxInputs];
         for(int x = 0; x < input.length; x++)
         {
             if(inputId == x)

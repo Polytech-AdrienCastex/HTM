@@ -96,8 +96,8 @@ public class Column
 
     public void increasePermanances(double value)
     {
-        synapses.stream()
-                .forEach(s -> s.incPermanance(value));
+        for(InputSynapse s : synapses)
+            s.incPermanance(value);
     }
 
     public void setActive(boolean active)
